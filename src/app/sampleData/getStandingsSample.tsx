@@ -1,4 +1,4 @@
-import { Standing } from "@/type";
+import { Standing } from "@/types";
 
 export default function getStandingsSample(): Standing[]{
     const standingsSample = `[{"league":{"id":39,

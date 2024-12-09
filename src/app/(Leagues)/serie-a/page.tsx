@@ -8,7 +8,7 @@ const SerieA = async () => {
   const leagueId = 207 ;
   const serieAData = await getFixturesById(leagueId);
   const seriAFixtures = serieAData.result;
-  console.log(seriAFixtures);
+  
 
   if (!seriAFixtures ) {
     return (

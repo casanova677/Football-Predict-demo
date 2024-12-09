@@ -1,4 +1,4 @@
-import { AllFixtures } from "@/type";
+import { AllFixtures } from "@/types";
 
 export default function getFixturesSample(): AllFixtures[]{
     let fixturesSample = `[

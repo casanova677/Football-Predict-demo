@@ -1,4 +1,4 @@
-import { AllFixtures, Fixture } from "@/type";
+import { AllFixtures, Fixture } from "@/types";
 import { USE_SAMPLE } from "../sampleData/useSample";
 import moment from "moment";
 import getFixturesSample from "../sampleData/getFixturesSample";

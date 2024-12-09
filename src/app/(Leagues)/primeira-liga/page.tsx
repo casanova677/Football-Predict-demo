@@ -5,10 +5,10 @@ import Standings from "@/components/Table";
 
 const PrimeiraLiga = async () => {
  
-  const leagueId = 266 ;
+  const leagueId = 152 ;
   const getPrimeiraLiga = await getFixturesById(leagueId);
   const primeFixtures = getPrimeiraLiga.result;
-  console.log(primeFixtures);
+
 
   if (!primeFixtures ) {
     return (

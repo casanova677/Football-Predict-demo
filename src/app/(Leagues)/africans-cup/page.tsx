@@ -4,9 +4,9 @@ import LeagueTable from "@/components/LeagueTable";
 import Livescore from "@/components/Livescore";
 import Standings from "@/components/Table";
 
-const PrimeiraLiga = async () => {
+const Africansup = async () => {
  
-  const leagueId = 7098 ;
+  const leagueId = 152 ;
   const getPrimeiraLiga = await getFixturesById(leagueId);
   const primeFixtures = getPrimeiraLiga.result;
   
@@ -60,4 +60,4 @@ const PrimeiraLiga = async () => {
     }
 };
 
-export default PrimeiraLiga;
+export default Africansup;

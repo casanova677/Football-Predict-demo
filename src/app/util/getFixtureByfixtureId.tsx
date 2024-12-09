@@ -1,9 +1,10 @@
 import 'server-only'
 import getFixtures from './getFixtures';
-import { Fixture } from '@/type';
+import { Fixture } from '@/types';
 
 
-export default async function getFixtureByFixtureId(id: number): Promise<Fixture | undefined> {
+
+export default async function getFixtureByFixtureId(id: any): Promise<Fixture | undefined> {
     try {
         const allFixturesByLeague = await getFixtures ();
 

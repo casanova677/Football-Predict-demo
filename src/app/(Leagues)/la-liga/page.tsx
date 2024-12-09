@@ -8,7 +8,7 @@ const LaLiga = async () => {
   const leagueId = 302 ;
   const getLaLiga = await getFixturesById(leagueId);
   const laligaFixtures = getLaLiga.result;
-  console.log(laligaFixtures);
+
 
   if (!laligaFixtures ) {
     return (

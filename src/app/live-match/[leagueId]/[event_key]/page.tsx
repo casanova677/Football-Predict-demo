@@ -54,6 +54,7 @@ export default function LiveMatch() {
     substitutes,
     lineups,
     statistics,
+
   } = matchData;
 
   return (

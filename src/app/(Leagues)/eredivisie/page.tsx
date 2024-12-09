@@ -5,7 +5,7 @@ import Standings from "@/components/Table";
 import React, { useMemo } from "react";
 
 const Eredivisie = async () => {
-  const leagueId = 244;
+  const leagueId = 152;
   const getCopaLibertadores = await getFixturesById(leagueId);
   const chiampionsFixtures = getCopaLibertadores.result;
 

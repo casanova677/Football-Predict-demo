@@ -5,7 +5,7 @@ import React from 'react';
 const StandingsTable = () => {
   return (
     <div className="flex justify-center items-center w-full">
-      <Table/>
+      <Table leagueId={0}/>
     </div>
   );
 };

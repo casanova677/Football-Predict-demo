@@ -1,4 +1,4 @@
-import { Fixture } from "@/type";
+import { Fixture } from "@/types";
 import "server-only";
 import getFixtures from "./getFixtures";
 import moment from "moment";

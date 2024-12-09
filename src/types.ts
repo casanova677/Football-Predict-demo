@@ -367,7 +367,7 @@ export type Player = {
   player_yellow_cards: string;
   player_red_cards: string;
   player_image: string;
-  home_scorer:string;
+  home_scorer:any;
 };
 
 
@@ -446,6 +446,8 @@ export type LiveMatchData = {
   home_team_logo:string;
   away_team_logo:string;
   substitutes:Player[];
+  in:Player[];
+  out:Player[];
 };
 
 export type Standing = {
@@ -486,8 +488,8 @@ export type TopScorer = {
 
 // Define types for player substitutions
 type PlayerSubstitution = {
-  in: string;         // Name of the player coming in
-  out: string;        // Name of the player being replaced
+  in: any;         // Name of the player coming in
+  out: any;        // Name of the player being replaced
   in_id: number;      // ID of the player coming in (0 if not available)
   out_id: number;     // ID of the player being replaced (0 if not available)
 };

@@ -7,9 +7,7 @@ import getStandingsSample from "../sampleData/getStandingsSample";
 import { Standing, StandingResponse } from "@/types";
 
 export default async function getStandings(): Promise<StandingResponse[]> {
-  if (USE_SAMPLE) {
-    return getStandingsSample();
-  }
+  
   const currentTime = moment();
   const month = currentTime.month();
   let year;
