@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: 'build', // Specify your custom build directory here
   images: {
     remotePatterns: [
       {
@@ -13,9 +14,9 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'media-1.api-sports.io',
-      }
+      },
     ],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
