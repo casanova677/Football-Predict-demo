@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: 'build', // Specify your custom build directory here
   images: {
     remotePatterns: [
       {
