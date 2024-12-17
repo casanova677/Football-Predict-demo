@@ -6,7 +6,7 @@ import Standings from "@/components/Table";
 import { FixtureType } from "@/types";
 
 const English = async () => {
-  const leagueId = 152 ;
+  const leagueId = 244 ;
   const getEnglishLeague = await getFixturesById(leagueId);
   const englishFixtures = getEnglishLeague.result;
 
