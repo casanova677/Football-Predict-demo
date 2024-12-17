@@ -6,7 +6,7 @@ import Standings from "@/components/Table";
 
 const Africansup = async () => {
  
-  const leagueId = 152 ;
+  const leagueId = 29 ;
   const getPrimeiraLiga = await getFixturesById(leagueId);
   const primeFixtures = getPrimeiraLiga.result;
   
