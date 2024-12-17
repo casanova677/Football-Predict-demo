@@ -23,12 +23,12 @@ const Africansup = async () => {
     if (!sortedFixtures.length) {
       return (
         <div className=" w-full">
-          <div className="py-2 px-2 my-2">
+          <div className="py-2 px-2 my-2 ">
             <p className="text-center justify-center py-2">No Fixtures Today</p>
           </div>
           <div className="py-2 px-2 my-2">
             <p className="text-center justify-center py-2">
-              Primeira Liga Standings
+              Africans Cup of Nations Standings
             </p>
             <Standings leagueId={leagueId} />
           </div>
