@@ -160,185 +160,182 @@ const Matches = ({ data }: Props) => {
      );
   }
 
-  return (
-    <div className="p-4 space-y-4 dark:bg-gray-700">
-      {/* Check if there are fixtures to display */}
-      {Object.keys(groupedFixtures).length === 0 ? (
-        <div className="flex justify-between items-center gap-2 p-4 rounded-lg shadow-md dark:bg-gray-700">
-          <div className="text-center col-span-4">
-            <p className="text-sm font-medium text-gray-500">
-              No matches scheduled today
-            </p>
+ return (
+  <div className="p-4 space-y-4 dark:bg-gray-700">
+    {/* Check if there are fixtures to display */}
+    {Object.keys(groupedFixtures).length === 0 ? (
+      <div className="flex flex-col items-center gap-2 p-4 rounded-lg shadow-md dark:bg-gray-700">
+        <p className="text-sm font-medium text-gray-500">
+          No matches scheduled today
+        </p>
+      </div>
+    ) : (
+      // Iterate over each league and its fixtures
+      Object.entries(groupedFixtures).map(([leagueName, fixtures]) => (
+        <div key={leagueName} className="space-y-4">
+          {/* League Header */}
+          <div className="mb-4 flex items-center justify-between px-4 py-2 bg-slate-600 hover:bg-slate-700 rounded-md">
+            <div className="flex items-center space-x-2">
+              {fixtures[0].league_logo && (
+                <Image
+                  src={
+                    LEAGUES_TO_CHECK.includes(leagueName.toLowerCase())
+                      ? handleEmptyLogo(leagueName) ?? "/default-league-logo.png"
+                      : fixtures[0].league_logo ?? "/default-league-logo.png"
+                  }
+                  alt={leagueName}
+                  width={24}
+                  height={24}
+                  className="flex-shrink-0"
+                />
+              )}
+              <p className="text-base md:text-lg text-teal-400 truncate">
+                {leagueName}
+              </p>
+            </div>
           </div>
-        </div>
-      ) : (
-        // Iterate over each league and its fixtures
-        Object.entries(groupedFixtures).map(([leagueName, fixtures]) => (
-          <div key={leagueName} className="space-y-4">
-            {/* League Header */}
-            <div className="mb-4 flex justify-between items-center px-4 py-1 bg-slate-600 hover:bg-slate-700 rounded-md">
-              <div className="flex space-x-4">
-                {fixtures[0].league_logo && (
+
+          {/* Fixtures for this league */}
+          {fixtures.map((fixture) => (
+            <div
+              className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800"
+              key={fixture.event_key}
+              onClick={() =>
+                handleFixtureClick(fixture.home_team_key, fixture.away_team_key)
+              }
+            >
+              {/* Home Team */}
+              <div className="flex items-center justify-between sm:justify-start">
+                {fixture.home_team_logo && (
                   <Image
-                    src={
-                      LEAGUES_TO_CHECK.includes(leagueName.toLowerCase())
-                        ? handleEmptyLogo(leagueName) ??
-                          "/default-league-logo.png"
-                        : fixtures[0].league_logo ?? "/default-league-logo.png"
-                    }
-                    alt={leagueName}
+                    src={fixture.home_team_logo}
+                    alt={fixture.event_home_team}
                     width={24}
                     height={24}
+                    className="mr-2 flex-shrink-0"
                   />
                 )}
-                <p className="text-lg text-teal-400">{leagueName}</p>
+                <span className="text-sm font-medium truncate">
+                  {fixture.event_home_team}
+                </span>
+              </div>
+
+              {/* Match Info */}
+              <div className="text-center space-y-1">
+                <p className="text-xs text-gray-500 truncate">
+                  {fixture.league_name}
+                </p>
+                {fixture.status === "FINISHED" ? (
+                  <p className="text-sm font-semibold">
+                    {fixture.event_ft_result || "0-0"}
+                  </p>
+                ) : (
+                  <p className="text-xs text-gray-500">{fixture.event_time}</p>
+                )}
+              </div>
+
+              {/* Away Team */}
+              <div className="flex items-center justify-between sm:justify-end">
+                <span className="text-sm font-medium mr-2 truncate">
+                  {fixture.event_away_team}
+                </span>
+                {fixture.away_team_logo && (
+                  <Image
+                    src={fixture.away_team_logo}
+                    alt={fixture.event_away_team}
+                    width={24}
+                    height={24}
+                    className="ml-2 flex-shrink-0"
+                  />
+                )}
+              </div>
+
+              {/* Prediction Section */}
+              <div className="flex flex-col items-end space-y-2">
+                {pathname === "/admin" ? (
+                  <>
+                    <input
+                      onChange={(e) =>
+                        handleInputChange(
+                          fixture.event_key,
+                          "prediction",
+                          e.target.value
+                        )
+                      }
+                      value={
+                        matchPredictions[fixture.event_key]?.prediction || ""
+                      }
+                      placeholder="Prediction"
+                      type="text"
+                      className="py-1 px-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 w-full sm:w-20 text-center"
+                    />
+
+                    <input
+                      onChange={(e) =>
+                        handleInputChange(
+                          fixture.event_key,
+                          "outcome1",
+                          e.target.value
+                        )
+                      }
+                      value={
+                        matchPredictions[fixture.event_key]?.outcome1 || ""
+                      }
+                      placeholder="Outcome 1"
+                      type="text"
+                      className="py-1 px-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 w-full sm:w-20 text-center"
+                    />
+
+                    <input
+                      onChange={(e) =>
+                        handleInputChange(
+                          fixture.event_key,
+                          "outcome2",
+                          e.target.value
+                        )
+                      }
+                      value={
+                        matchPredictions[fixture.event_key]?.outcome2 || ""
+                      }
+                      placeholder="Outcome 2"
+                      type="text"
+                      className="py-1 px-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 w-full sm:w-20 text-center"
+                    />
+
+                    <button
+                      onClick={() => handleUpdate(fixture.event_key)}
+                      className="py-1 px-4 text-sm text-white bg-teal-500 hover:bg-teal-600 rounded-md w-full sm:w-auto"
+                    >
+                      Update
+                    </button>
+                  </>
+                ) : (
+                  <div className="text-center">
+                    {matchPredictions[fixture.event_key]?.outcome1 && (
+                      <p className="text-xs align-text-top hover:text-green-500 uppercase truncate">
+                        {matchPredictions[fixture.event_key]?.outcome1}
+                      </p>
+                    )}
+                    {matchPredictions[fixture.event_key]?.outcome2 && (
+                      <p className="text-xs align-text-bottom hover:text-green-500 uppercase truncate">
+                        {matchPredictions[fixture.event_key]?.outcome2}
+                      </p>
+                    )}
+                    {matchPredictions[fixture.event_key]?.prediction && (
+                      <p className="text-xs align-text-bottom truncate">
+                        {matchPredictions[fixture.event_key]?.prediction}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
-
-            {/* Fixtures for this league */}
-            {fixtures.map((fixture) => (
-              <div
-                className="grid grid-cols-4 items-center gap-2 p-4 rounded-lg shadow-md"
-                key={fixture.event_key}
-                onClick={() =>
-                  handleFixtureClick(
-                    fixture.home_team_key,
-                    fixture.away_team_key
-                  )
-                }
-              >
-                {/* Home Team */}
-                <div className="flex items-center">
-                  {fixture.home_team_logo ? (
-                    <Image
-                      src={fixture.home_team_logo}
-                      alt={fixture.event_home_team}
-                      width={24}
-                      height={24}
-                      className="mr-2"
-                    />
-                  ) : null}
-                  <span className="text-sm font-medium">
-                    {fixture.event_home_team}
-                  </span>
-                </div>
-
-                {/* Match Info */}
-                <div className="text-center space-y-1">
-                  <p className="text-xs text-gray-500">{fixture.league_name}</p>
-                  {fixture.status === "FINISHED" ? (
-                    <p className="text-sm font-semibold">
-                      {fixture.event_ft_result || "0-0"}
-                    </p>
-                  ) : (
-                    <p className="text-xs text-gray-500">
-                      {fixture.event_time}
-                    </p>
-                  )}
-                </div>
-
-                {/* Away Team */}
-                <div className="flex items-center justify-end">
-                  <span className="text-sm font-medium mr-2">
-                    {fixture.event_away_team}
-                  </span>
-                  {fixture.away_team_logo ? (
-                    <Image
-                      src={fixture.away_team_logo}
-                      alt={fixture.event_away_team}
-                      width={24}
-                      height={24}
-                      className="ml-2"
-                    />
-                  ) : null}
-                </div>
-
-                {/* Prediction Section */}
-                <div className="flex flex-col items-end space-y-2">
-                  {pathname === "/admin" ? (
-                    <>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            fixture.event_key,
-                            "prediction",
-                            e.target.value
-                          )
-                        }
-                        value={
-                          matchPredictions[fixture.event_key]?.prediction || ""
-                        }
-                        placeholder="Enter Prediction"
-                        type="text"
-                        className="py-1 px-2 text-blue-800 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 w-20 text-center"
-                      />
-
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            fixture.event_key,
-                            "outcome1",
-                            e.target.value
-                          )
-                        }
-                        value={
-                          matchPredictions[fixture.event_key]?.outcome1 || ""
-                        }
-                        placeholder="Outcome 1"
-                        type="text"
-                        className="py-1 px-2 text-blue-800 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 w-20 text-center"
-                      />
-
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            fixture.event_key,
-                            "outcome2",
-                            e.target.value
-                          )
-                        }
-                        value={
-                          matchPredictions[fixture.event_key]?.outcome2 || ""
-                        }
-                        placeholder="Outcome 2"
-                        type="text"
-                        className="py-1 px-2 text-blue-800 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 w-20 text-center"
-                      />
-
-                      <button
-                        onClick={() => handleUpdate(fixture.event_key)}
-                        className="py-1 px-4 text-white bg-teal-500 hover:bg-teal-600 rounded-md"
-                      >
-                        Update
-                      </button>
-                    </>
-                  ) : (
-                    <div className="text-center">
-                      {matchPredictions[fixture.event_key]?.outcome1 && (
-                        <p className="text-xs align-text-top hover:text-green-500 uppercase">
-                          {matchPredictions[fixture.event_key]?.outcome1}
-                        </p>
-                      )}
-                      {matchPredictions[fixture.event_key]?.outcome2 && (
-                        <p className="text-xs align-text-bottom hover:text-green-500 uppercase">
-                          {matchPredictions[fixture.event_key]?.outcome2}
-                        </p>
-                      )}
-                      {matchPredictions[fixture.event_key]?.prediction && (
-                        <p className="text-xs align-text-bottom">
-                          {matchPredictions[fixture.event_key]?.prediction}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        ))
-      )}
-    </div>
-  );
+          ))}
+        </div>
+      ))
+    )}
+  </div>
+);
 };
 
 export default Matches;
