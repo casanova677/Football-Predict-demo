@@ -336,11 +336,46 @@ export type H2HMatch = {
   event_country_key: string;
 };
 
-export type H2HData = {
-  H2H: H2HMatch[];
-  firstTeamResults: H2HMatch[];
-  secondTeamResults: H2HMatch[];
-};
+// types/index.ts (assumed)
+export interface H2HData {
+  H2H: Array<{
+    event_key: number;
+    event_date: string;
+    event_time: string;
+    event_home_team: string;
+    home_team_key: number;
+    event_away_team: string;
+    away_team_key: number;
+    event_final_result: string;
+    event_halftime_result: string;
+    event_status: string;
+    league_name: string;
+    league_key: number;
+    league_round: string;
+    country_name: string;
+    event_country_key: number;
+  }>;
+  firstTeamResults: Array<{
+    event_key: number;
+    event_date: string;
+    league_name: string;
+    home_team_key: number;
+    away_team_key: number;
+    event_home_team: string;
+    event_away_team: string;
+    event_final_result: string;
+  }>;
+  secondTeamResults: Array<{
+    event_key: number;
+    event_date: string;
+    league_name: string;
+    home_team_key: number;
+    away_team_key: number;
+    event_home_team: string;
+    event_away_team: string;
+    event_final_result: string;
+  }>;
+}
 
 
 

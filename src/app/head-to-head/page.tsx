@@ -32,18 +32,18 @@ const H2HPageContent = () => {
           const homeTeam = await fetchTeamData(Number(homeTeamKeyParam));
           const awayTeam = await fetchTeamData(Number(awayTeamKeyParam));
 
-          const leagueData = await getLeague(Number(h2hResponse.H2H[0].event_country_key));
-          if (leagueData && leagueData.result && leagueData.result.length > 0) {
+          const leagueData = await getLeague(
+            Number(h2hResponse.H2H[0].event_country_key)
+          );
+          if (leagueData?.result?.length > 0) {
             const targetLeagueKey = h2hResponse.H2H[0].league_key;
             const matchingLeague = leagueData.result.find(
-              (league: { league_key: any }) => league.league_key === targetLeagueKey
+              (league: { league_key: any }) =>
+                league.league_key === targetLeagueKey
             );
-            if (matchingLeague) {
-              setLeagueLogo(matchingLeague.league_logo || "/default-league-logo.png");
-            } else {
-              console.warn("No matching league found for league_key:", targetLeagueKey);
-              setLeagueLogo("/default-league-logo.png");
-            }
+            setLeagueLogo(
+              matchingLeague?.league_logo || "/default-league-logo.png"
+            );
           } else {
             console.warn("No league data available");
             setLeagueLogo("/default-league-logo.png");
@@ -79,8 +79,14 @@ const H2HPageContent = () => {
 
   const getOpponent = (match: any, teamKey: string) => {
     return {
-      name: match.home_team_key === teamKey ? match.event_away_team : match.event_home_team,
-      key: match.home_team_key === teamKey ? match.away_team_key : match.home_team_key,
+      name:
+        match.home_team_key === teamKey
+          ? match.event_away_team
+          : match.event_home_team,
+      key:
+        match.home_team_key === teamKey
+          ? match.away_team_key
+          : match.home_team_key,
     };
   };
 
@@ -104,7 +110,12 @@ const H2HPageContent = () => {
   };
 
   const renderRecentForm = (teamResults: any[], teamKey: string) => {
-    return teamResults.slice(0, 5).map((match: any, index: number) => {
+    // Filter out self-matches and take the first 5 valid matches
+    const validMatches = teamResults
+      .filter((match) => match.home_team_key !== match.away_team_key)
+      .slice(0, 5);
+
+    return validMatches.map((match: any, index: number) => {
       const result = getMatchResult(match, teamKey);
       const opponent = getOpponent(match, teamKey);
       const colorClass =
@@ -115,12 +126,14 @@ const H2HPageContent = () => {
           : "bg-gray-500";
       return (
         <li
-          key={index}
+          key={`${match.event_key}-${index}`}
           className="flex items-center space-x-4 py-2 border-b border-gray-700 last:border-b-0"
         >
           <div
             className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-sm ${colorClass}`}
-            title={`${match.event_final_result} vs ${opponent.name} (${result.toUpperCase()})`}
+            title={`${match.event_final_result} vs ${
+              opponent.name
+            } (${result.toUpperCase()})`}
           >
             {match.event_final_result}
           </div>
@@ -136,6 +149,9 @@ const H2HPageContent = () => {
             </p>
             <p className="text-xs text-gray-500">
               {result.charAt(0).toUpperCase() + result.slice(1)}
+            </p>
+            <p className="text-xs text-gray-500">
+              {match.league_name}, {match.event_date}
             </p>
           </div>
         </li>
@@ -222,7 +238,9 @@ const H2HPageContent = () => {
               priority
             />
           )}
-          <p className="text-2xl font-bold text-white mb-2">{h2hData.H2H[0].league_name}</p>
+          <p className="text-2xl font-bold text-white mb-2">
+            {h2hData.H2H[0].league_name}
+          </p>
           <p className="text-sm text-gray-300">{h2hData.H2H[0].event_date}</p>
           <p className="text-sm text-gray-300">{h2hData.H2H[0].event_time}</p>
         </div>
@@ -263,25 +281,43 @@ const H2HPageContent = () => {
             </Link>{" "}
             Recent Form
           </h3>
-          <div className="flex flex-col space-y-4">
-            {h2hData.firstTeamResults && (
+           <div className="flex flex-col space-y-4">
+            {h2hData.secondTeamResults &&
+            h2hData.secondTeamResults.length > 0 ? (
               <>
                 <ul className="space-y-2">
-                  {renderRecentForm(h2hData.firstTeamResults, homeTeamKeyParam!)}
+                  {renderRecentForm(
+                    h2hData.secondTeamResults,
+                    awayTeamKeyParam!
+                  )}
                 </ul>
                 <div className="text-sm text-gray-300">
                   <p>
                     <span className="font-semibold">Goals Scored:</span>{" "}
-                    {calculateGoals(h2hData.firstTeamResults, homeTeamKeyParam!).scored}
+                    {
+                      calculateGoals(
+                        h2hData.secondTeamResults,
+                        awayTeamKeyParam!
+                      ).scored
+                    }
                   </p>
                   <p>
                     <span className="font-semibold">Goals Conceded:</span>{" "}
-                    {calculateGoals(h2hData.firstTeamResults, homeTeamKeyParam!).conceded}
+                    {
+                      calculateGoals(
+                        h2hData.secondTeamResults,
+                        awayTeamKeyParam!
+                      ).conceded
+                    }
                   </p>
                 </div>
               </>
+            ) : (
+              <p className="text-sm text-gray-500">No recent matches found</p>
             )}
           </div>
+
+         
         </div>
         <div className="bg-slate-800 rounded-xl p-6 shadow-md">
           <h3 className="text-lg font-semibold text-white mb-4">
@@ -293,23 +329,38 @@ const H2HPageContent = () => {
             </Link>{" "}
             Recent Form
           </h3>
-          <div className="flex flex-col space-y-4">
-            {h2hData.secondTeamResults && (
+             <div className="flex flex-col space-y-4">
+            {h2hData.firstTeamResults && h2hData.firstTeamResults.length > 0 ? (
               <>
                 <ul className="space-y-2">
-                  {renderRecentForm(h2hData.secondTeamResults, awayTeamKeyParam!)}
+                  {renderRecentForm(
+                    h2hData.firstTeamResults,
+                    homeTeamKeyParam!
+                  )}
                 </ul>
                 <div className="text-sm text-gray-300">
                   <p>
                     <span className="font-semibold">Goals Scored:</span>{" "}
-                    {calculateGoals(h2hData.secondTeamResults, awayTeamKeyParam!).scored}
+                    {
+                      calculateGoals(
+                        h2hData.firstTeamResults,
+                        homeTeamKeyParam!
+                      ).scored
+                    }
                   </p>
                   <p>
                     <span className="font-semibold">Goals Conceded:</span>{" "}
-                    {calculateGoals(h2hData.secondTeamResults, awayTeamKeyParam!).conceded}
+                    {
+                      calculateGoals(
+                        h2hData.firstTeamResults,
+                        homeTeamKeyParam!
+                      ).conceded
+                    }
                   </p>
                 </div>
               </>
+            ) : (
+              <p className="text-sm text-gray-500">No recent matches found</p>
             )}
           </div>
         </div>
@@ -383,10 +434,12 @@ const H2HPageContent = () => {
                   {match.event_halftime_result}
                 </p>
                 <p className="text-sm text-gray-200">
-                  <span className="font-semibold">Status:</span> {match.event_status}
+                  <span className="font-semibold">Status:</span>{" "}
+                  {match.event_status}
                 </p>
                 <p className="text-sm text-gray-200">
-                  <span className="font-semibold">Round:</span> {match.league_round}
+                  <span className="font-semibold">Round:</span>{" "}
+                  {match.league_round}
                 </p>
               </div>
             )}
@@ -399,7 +452,13 @@ const H2HPageContent = () => {
 
 export default function H2HPage() {
   return (
-    <Suspense fallback={<div className="h-screen flex justify-center items-center text-xl text-gray-700">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="h-screen flex justify-center items-center text-xl text-gray-700">
+          Loading...
+        </div>
+      }
+    >
       <H2HPageContent />
     </Suspense>
   );
