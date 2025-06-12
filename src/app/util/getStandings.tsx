@@ -18,7 +18,7 @@ export default async function getStandings(): Promise<StandingResponse[]> {
     year = currentTime.year();
   }
 
-  const API_KEY = process.env.API_TOKEN_MAGIC;
+ const API_MAGIC3 = process.env.NEXT_PUBLIC_API_TOKEN_MAGIC3;
 
 
   const standings: StandingResponse[] = [];
@@ -86,7 +86,7 @@ export default async function getStandings(): Promise<StandingResponse[]> {
 
   for (const league of leagues) {
     const leagueId = league.id;
-    const url = `https://apiv2.allsportsapi.com/football/?&met=Standings&leagueId=${leagueId}&APIkey=eea5cc09b765a5f1a6db46e24059fc6d927eb878d3d90e0d0c5d999fab2d54b7`;
+    const url = `https://apiv2.allsportsapi.com/football/?&met=Standings&leagueId=${leagueId}&APIkey=${API_MAGIC3}`;
     const TTL = 60 * 60 * 1000; // 1 hour
 
     if (cache.has(leagueId)) {

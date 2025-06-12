@@ -32,7 +32,6 @@ const Sidebar: FC = () => {
     setIsOpen(false);
   }, [pathname]);
 
-  // Lock scroll when sidebar is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -67,7 +66,6 @@ const Sidebar: FC = () => {
           </button>
         </div>
 
-        {/* Links */}
         <ul
           className="overflow-y-auto h-[calc(100%-60px)] px-4 py-2 space-y-2 scrollbar-hide"
         >
@@ -77,7 +75,7 @@ const Sidebar: FC = () => {
               className="flex items-center p-2 rounded-md hover:bg-teal-500 hover:text-white transition-all duration-300 cursor-pointer"
               onClick={() => {
                 setLeagueId(league.id);
-                toggleMenu(); // Close menu on link click
+                toggleMenu();
               }}
             >
               <LinkSide
@@ -93,10 +91,10 @@ const Sidebar: FC = () => {
 
       {/* Menu Button */}
       <button
-        className="fixed top-4 right-4 z-50 p-2 bg-teal-500 text-white rounded-full shadow-md focus:outline-none md:relative md:right-0 md:top-0 md:rounded-md"
-        onClick={toggleMenu}
+        className="fixed top-0 right-0 z-40 p-2 bg-teal-500 text-white rounded-full shadow-md focus:outline-none md:relative md:right-0 md:top-0 md:rounded-md"        
+          onClick={toggleMenu}
       >
-        <AiOutlineMenu size={24} />
+        <AiOutlineMenu size={14} />
       </button>
     </>
   );

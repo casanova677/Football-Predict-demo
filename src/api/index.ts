@@ -17,11 +17,12 @@ const API_MAGIC3 = process.env.NEXT_PUBLIC_API_TOKEN_MAGIC3;
 export const fetchH2HData = async (homeTeamKey: number, awayTeamKey: number) => {
   try {
     // Construct the URL with dynamic team IDs
-    const response = await api.get(`https://apiv2.allsportsapi.com/football/?met=H2H&APIkey=${API_MAGIC3}&firstTeamId=${homeTeamKey}&secondTeamId=${awayTeamKey}`);
+    const response = await fetch(`https://apiv2.allsportsapi.com/football/?met=H2H&APIkey=${API_MAGIC3}&firstTeamId=${homeTeamKey}&secondTeamId=${awayTeamKey}`);
 
-    if (response.data) {
-     
-      return response.data.result; // Return result part
+    const data = await response.json();
+    if (data && data.result) {
+      return data.result;
+      // console.log(response); // Return result part
     } else {
       console.warn("No H2H data found for the given teams.");
       return null;
@@ -151,7 +152,7 @@ export const getAllFixtures = async (): Promise<FixtureType []> => {
 
     const response = await axios.get(`https://apiv2.allsportsapi.com/football/?met=Fixtures&APIkey=${API_MAGIC3}&from=${today}&to=${today}`, ); // Replace with actual endpoint
    
-    return response.data.result; // Adjust according to the API response structure
+     return response.data.result || []; // Adjust accordi\ng to the API response structure
    
   } catch (error) {
     console.error('Error fetching fixtures:', error);
@@ -233,12 +234,10 @@ export const fetchAllTeamData = async (teamIds: number[]) => {
 // Function to fetch individual team data
 export const fetchTeamData = async (teamId: number) => {
   try {
-    const response = await axios.get(`https://apiv2.allsportsapi.com/football/?met=Teams&APIkey=${API_MAGIC3}&teamId=${teamId}`);
-    
-    if (response.data && response.data.result) {
-     
-      return response.data.result[0]; // Return first item in the result array
-      
+    const response = await fetch(`https://apiv2.allsportsapi.com/football/?met=Teams&APIkey=${API_MAGIC3}&teamId=${teamId}`);
+    const data = await response.json();
+    if (data && data.result) {
+      return data.result[0]; // Return first item in the result array
     } else {
       console.warn("No team data found for the given team ID.");
       return null;
@@ -269,10 +268,10 @@ export const getLivescores = async (leagueId:number) => {
  
 }
 
-export const getAllTeams= async() => {
+export const getAllTeams= async(leagueId:number) => {
   try {
     const response = await fetch(
-      `https://apiv2.allsportsapi.com/football/?met=Teams&APIkey=${API_MAGIC3}`,
+      `https://apiv2.allsportsapi.com/football/?met=Teams&APIkey=${API_MAGIC3}&countryId=${leagueId}`,
       { next: { revalidate: 20 } }
       );
       console.log(response)
@@ -288,3 +287,60 @@ export const getAllTeams= async() => {
       throw error;
     }
 }
+
+export const getLeague = async (leagueId: number) => {
+  try {
+    const response = await fetch(
+      `https://apiv2.allsportsapi.com/football/?met=Leagues&APIkey=${API_MAGIC3}&leagueId=${leagueId}`,
+      { next: { revalidate: 20 } }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const leagueData = await response.json();
+
+    return leagueData;
+  } catch (error) {
+    console.error("Error fetching league data:", error);
+    throw error;
+  }
+}
+
+// api/index.ts
+export const getTeam = async (teamId: number) => {
+  try {
+    const response = await fetch(
+      `https://apiv2.allsportsapi.com/football/?met=Teams&APIkey=${API_MAGIC3}&teamId=${teamId}`,
+      { next: { revalidate: 20 } }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const teamData = await response.json();
+    return teamData;
+  } catch (error) {
+    console.error("Error fetching team data:", error);
+    throw error;
+  }
+};
+
+// api/index.ts
+export const getPlayer = async (playerId: number) => {
+  try {
+    const response = await fetch(
+      `https://apiv2.allsportsapi.com/football/?met=Players&playerId=${playerId}&APIkey=${API_MAGIC3}`,
+      { next: { revalidate: 20 } }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const playerData = await response.json();
+    return playerData;
+  } catch (error) {
+    console.error("Error fetching player data:", error);
+    throw error;
+  }
+};
+

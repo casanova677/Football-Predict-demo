@@ -12,10 +12,10 @@ const Status: React.FC<StatusProps> = ({ matchesList, matchesListFinished }) => 
 
   const [statusMatch, setStatusMatch] = useState<"TODAY" | "FINISHED">("TODAY");
 
-  const filteredMatches = statusMatch === "TODAY"
-    ? matchesList.filter(match => match.status === "TIMED")
-    : matchesListFinished;
-   
+  // const filteredMatches = statusMatch === "TODAY"
+  //   ? matchesList.filter(match => match.status === "TIMED")
+  //   : matchesListFinished;
+
 
   return (
     <div>
@@ -26,13 +26,13 @@ const Status: React.FC<StatusProps> = ({ matchesList, matchesListFinished }) => 
         >
           Today
         </button>
-       
+
       </div>
 
       <div className="w-full">
-        
-      <LeagueTable data={matchesList} />
-      
+
+        <LeagueTable data={matchesList} />
+
       </div>
     </div>
   );

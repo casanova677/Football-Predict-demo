@@ -33,13 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
       <body
-        className={`${inter.className} bg-cover bg-center`}
-        style={{
-          backgroundImage: "url('/img/home4.jpg')",
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
-        }}
-      >
+        className={`${inter.className} bg-cover bg-center`}>
         <main className="px-2 md:py-2 text-textPrimary">
           <Navbar />
           <ToastContainer />

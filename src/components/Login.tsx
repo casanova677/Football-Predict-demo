@@ -21,7 +21,8 @@ export default function Login() {
         }
       );
 
-      const { token } = response.data; // Extract token from the response
+      const { token } = response.data; 
+      console.log(response.data);// Extract token from the response
       localStorage.setItem("token", token); // Store token in localStorage
 
       router.push("/admin"); // Redirect to admin page
@@ -44,7 +45,7 @@ export default function Login() {
           <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
             Don't have an account yet?{" "}
             <a
-              href="/signup"
+              href="/register"
               className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
             >
               Sign up here
